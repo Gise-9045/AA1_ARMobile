@@ -13,7 +13,7 @@ namespace UnityEngine.XR.Templates.AR
     /// menu again when the create menu button is clicked after dismissal. Manages object deletion in the AR demo scene,
     /// and also handles the toggling between the object creation menu button and the delete button.
     /// </summary>
-    public class ARTemplateMenuManager : MonoBehaviour
+    public class ARTemplateMenuManagerModified : MonoBehaviour
     {
         [SerializeField]
         [Tooltip("Button that opens the create menu.")]
@@ -52,6 +52,19 @@ namespace UnityEngine.XR.Templates.AR
         {
             get => m_ObjectMenu;
             set => m_ObjectMenu = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The menu with all the Filters.")]
+        GameObject m_FilterMenu;
+
+        /// <summary>
+        /// The menu with all the creatable objects.
+        /// </summary>
+        public GameObject FilterMenu
+        {
+            get => m_FilterMenu;
+            set => m_FilterMenu = value;
         }
 
         [SerializeField]
@@ -107,6 +120,19 @@ namespace UnityEngine.XR.Templates.AR
         }
 
         [SerializeField]
+        [Tooltip("Button that closes the Filter menu.")]
+        Button m_CancelFilterButton;
+
+        /// <summary>
+        /// Button that closes the Filter menu.
+        /// </summary>
+        public Button cancelFilterButton
+        {
+            get => m_CancelFilterButton;
+            set => m_CancelFilterButton = value;
+        }
+
+        [SerializeField]
         [Tooltip("The interaction group for the AR demo scene.")]
         XRInteractionGroup m_InteractionGroup;
 
@@ -130,6 +156,16 @@ namespace UnityEngine.XR.Templates.AR
         {
             get => m_DebugPlaneSlider;
             set => m_DebugPlaneSlider = value;
+        }
+
+        [SerializeField]
+        [Tooltip("Botón de filtros")]
+        Button m_filterButton;
+
+        public Button filterButton
+        {
+            get => m_filterButton;
+            set => m_filterButton = value;
         }
 
         [SerializeField]
@@ -212,6 +248,7 @@ namespace UnityEngine.XR.Templates.AR
 
         bool m_IsPointerOverUI;
         bool m_ShowObjectMenu;
+        bool m_ShowFilterMenu;
         bool m_ShowOptionsModal;
         bool m_VisualizePlanes = true;
         bool m_ShowDebugMenu;
@@ -232,6 +269,8 @@ namespace UnityEngine.XR.Templates.AR
             m_CancelButton.onClick.AddListener(HideMenu);
             m_DeleteButton.onClick.AddListener(DeleteFocusedObject);
             m_PlaneManager.trackablesChanged.AddListener(OnPlaneChanged);
+            m_filterButton.onClick.AddListener(ShowFilterButton);
+            m_CancelFilterButton.onClick.AddListener(HideFilterMenu);
         }
 
         /// <summary>
@@ -244,6 +283,8 @@ namespace UnityEngine.XR.Templates.AR
             m_CancelButton.onClick.RemoveListener(HideMenu);
             m_DeleteButton.onClick.RemoveListener(DeleteFocusedObject);
             m_PlaneManager.trackablesChanged.RemoveListener(OnPlaneChanged);
+            m_filterButton.onClick.RemoveListener(ShowFilterButton);
+            m_CancelFilterButton.onClick.RemoveListener(HideFilterMenu);
         }
 
         /// <summary>
@@ -278,7 +319,7 @@ namespace UnityEngine.XR.Templates.AR
                 m_InitializingDebugMenu = false;
             }
 
-            if (m_ShowObjectMenu || m_ShowOptionsModal)
+            if (m_ShowObjectMenu || m_ShowOptionsModal || m_ShowFilterMenu)
             {
                 if (!m_IsPointerOverUI && (m_TapStartPositionInput.TryReadValue(out _) || m_DragCurrentPositionInput.TryReadValue(out _)))
                 {
@@ -287,24 +328,37 @@ namespace UnityEngine.XR.Templates.AR
 
                     if (m_ShowOptionsModal)
                         m_ModalMenu.SetActive(false);
+
+                    if(m_ShowFilterMenu)
+                        HideFilterMenu();
                 }
 
                 if (m_ShowObjectMenu)
                 {
                     m_DeleteButton.gameObject.SetActive(false);
+                    m_filterButton.gameObject.SetActive(false);
+                }
+                else if (m_ShowFilterMenu)
+                {
+                    m_DeleteButton.gameObject.SetActive(false);
+                    m_filterButton.gameObject.SetActive(false);
                 }
                 else
                 {
                     m_DeleteButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
+                    m_filterButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
                 }
+                
 
-                m_IsPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(-1);
+                
+                    m_IsPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(-1);
             }
             else
             {
                 m_IsPointerOverUI = false;
                 m_CreateButton.gameObject.SetActive(true);
                 m_DeleteButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
+                m_filterButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
             }
 
             if (!m_IsPointerOverUI && m_ShowOptionsModal)
@@ -341,6 +395,9 @@ namespace UnityEngine.XR.Templates.AR
 
         void ShowMenu()
         {
+            m_ShowFilterMenu = false;
+            if (m_FilterMenu != null) m_FilterMenu.SetActive(false);
+
             m_ShowObjectMenu = true;
             m_ObjectMenu.SetActive(true);
             if (!m_ObjectMenuAnimator.GetBool("Show"))
@@ -348,6 +405,19 @@ namespace UnityEngine.XR.Templates.AR
                 m_ObjectMenuAnimator.SetBool("Show", true);
             }
             AdjustARDebugMenuPosition();
+        }
+
+        void ShowFilter()
+        {
+            m_ShowObjectMenu = false;
+            if (m_ObjectMenu != null) m_ObjectMenu.SetActive(false);
+            m_ShowFilterMenu = true;
+            m_FilterMenu.SetActive(true);
+            if (!m_ObjectMenuAnimator.GetBool("Show"))
+            {
+                m_ObjectMenuAnimator.SetBool("Show", true);
+            }
+            //AdjustARDebugMenuPosition();
         }
 
         /// <summary>
@@ -429,6 +499,12 @@ namespace UnityEngine.XR.Templates.AR
             m_ShowObjectMenu = false;
             AdjustARDebugMenuPosition();
         }
+        public void HideFilterMenu()
+        {
+            m_ObjectMenuAnimator.SetBool("Show", false);
+            m_ShowFilterMenu = false;
+            AdjustARDebugMenuPosition();
+        }
 
         void ChangePlaneVisibility(bool setVisible)
         {
@@ -455,6 +531,15 @@ namespace UnityEngine.XR.Templates.AR
             if (currentFocusedObject != null)
             {
                 Destroy(currentFocusedObject.transform.gameObject);
+            }
+        }
+
+        void ShowFilterButton()
+        {
+            var currentFocusedObject = m_InteractionGroup.focusInteractable;
+            if (currentFocusedObject != null)
+            {
+                ShowFilter();
             }
         }
 
