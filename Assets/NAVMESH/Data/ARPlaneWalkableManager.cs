@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
 
 namespace ARNavigation
 {
     public class ARPlaneWalkableManager : MonoBehaviour
     {
-        [Header("Trackables")]
-        [SerializeField] private string trackablesObjectName = "Trackables";
+        [Header("AR")]
+        [SerializeField] private ARPlaneManager planeManager;
 
         [Header("Point Generation")]
         [SerializeField] private float pointSpacing = 0.2f;
@@ -17,38 +18,83 @@ namespace ARNavigation
         [SerializeField] private float rotationTolerance = 5f;
         [SerializeField] private float heightTolerance = 0.2f;
 
-        private Transform trackables;
-        private int previousChildCount = -1;
+        [Header("Runtime Debug")]
+        [SerializeField] private bool showRuntimeDebugPoints = false;
+        [SerializeField] private GameObject debugPointPrefab;
+        [SerializeField] private float debugPointScale = 0.03f;
+        [SerializeField] private Transform debugContainer;
 
         private readonly List<ARWalkablePlaneData> planeDataList = new List<ARWalkablePlaneData>();
         private readonly Dictionary<int, List<ARWalkablePlaneData>> groupedPlanes = new Dictionary<int, List<ARWalkablePlaneData>>();
+        private readonly List<GameObject> spawnedDebugPoints = new List<GameObject>();
 
-        private void Update()
+        private void OnEnable()
         {
-            if (trackables == null)
+            if (planeManager == null)
             {
-                TryFindTrackables();
+                planeManager = FindObjectOfType<ARPlaneManager>();
+            }
+
+            if (planeManager == null)
+            {
+                Debug.LogError("[ARPlaneWalkableManager] No se encontró ARPlaneManager.");
                 return;
             }
 
-            if (trackables.childCount != previousChildCount)
+            planeManager.planesChanged += OnPlanesChanged;
+
+            foreach (ARPlane plane in planeManager.trackables)
             {
-                previousChildCount = trackables.childCount;
-                RefreshPlanes();
+                SubscribeToPlane(plane);
+            }
+
+            RefreshPlanes();
+        }
+
+        private void OnDisable()
+        {
+            if (planeManager != null)
+            {
+                planeManager.planesChanged -= OnPlanesChanged;
+
+                foreach (ARPlane plane in planeManager.trackables)
+                {
+                    UnsubscribeFromPlane(plane);
+                }
             }
         }
 
-        private void TryFindTrackables()
+        private void OnPlanesChanged(ARPlanesChangedEventArgs args)
         {
-            GameObject trackablesObject = GameObject.Find(trackablesObjectName);
-
-            if (trackablesObject != null)
+            for (int i = 0; i < args.added.Count; i++)
             {
-                trackables = trackablesObject.transform;
-                previousChildCount = -1;
-                RefreshPlanes();
-                Debug.Log("[ARPlaneWalkableManager] Trackables encontrado.");
+                SubscribeToPlane(args.added[i]);
             }
+
+            for (int i = 0; i < args.removed.Count; i++)
+            {
+                UnsubscribeFromPlane(args.removed[i]);
+            }
+
+            RefreshPlanes();
+        }
+
+        private void SubscribeToPlane(ARPlane plane)
+        {
+            if (plane == null) return;
+            plane.boundaryChanged -= OnPlaneBoundaryChanged;
+            plane.boundaryChanged += OnPlaneBoundaryChanged;
+        }
+
+        private void UnsubscribeFromPlane(ARPlane plane)
+        {
+            if (plane == null) return;
+            plane.boundaryChanged -= OnPlaneBoundaryChanged;
+        }
+
+        private void OnPlaneBoundaryChanged(ARPlaneBoundaryChangedEventArgs args)
+        {
+            RefreshPlanes();
         }
 
         private void RefreshPlanes()
@@ -56,11 +102,11 @@ namespace ARNavigation
             planeDataList.Clear();
             groupedPlanes.Clear();
 
-            if (trackables == null) return;
+            if (planeManager == null) return;
 
-            for (int i = 0; i < trackables.childCount; i++)
+            foreach (ARPlane plane in planeManager.trackables)
             {
-                Transform plane = trackables.GetChild(i);
+                if (plane == null) continue;
 
                 MeshFilter meshFilter = plane.GetComponent<MeshFilter>();
                 MeshCollider meshCollider = plane.GetComponent<MeshCollider>();
@@ -70,13 +116,13 @@ namespace ARNavigation
 
                 ARWalkablePlaneData planeData = new ARWalkablePlaneData
                 {
-                    PlaneTransform = plane,
+                    PlaneTransform = plane.transform,
                     MeshFilter = meshFilter,
                     MeshCollider = meshCollider,
-                    HeightY = plane.position.y
+                    HeightY = plane.transform.position.y
                 };
 
-                planeData.GroupKey = GetGroupKey(plane.rotation, plane.position);
+                planeData.GroupKey = GetGroupKey(plane.transform.rotation, plane.transform.position);
                 GenerateWalkablePoints(planeData);
 
                 if (planeData.WalkablePoints.Count > 0)
@@ -90,6 +136,11 @@ namespace ARNavigation
 
                     groupedPlanes[planeData.GroupKey].Add(planeData);
                 }
+            }
+
+            if (showRuntimeDebugPoints)
+            {
+                DrawRuntimeDebugPoints();
             }
 
             Debug.Log($"[ARPlaneWalkableManager] Planos válidos: {planeDataList.Count}, grupos: {groupedPlanes.Count}");
@@ -130,14 +181,63 @@ namespace ARNavigation
             return rotX * 100000000 + rotY * 100000 + rotZ * 100 + posY;
         }
 
+        private void DrawRuntimeDebugPoints()
+        {
+            ClearRuntimeDebugPoints();
+
+            for (int i = 0; i < planeDataList.Count; i++)
+            {
+                List<Vector3> points = planeDataList[i].WalkablePoints;
+
+                for (int j = 0; j < points.Count; j += 3)
+                {
+                    GameObject pointVisual;
+
+                    if (debugPointPrefab != null)
+                    {
+                        pointVisual = Instantiate(debugPointPrefab, points[j], Quaternion.identity);
+                    }
+                    else
+                    {
+                        pointVisual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                        pointVisual.transform.position = points[j];
+
+                        Collider col = pointVisual.GetComponent<Collider>();
+                        if (col != null)
+                        {
+                            Destroy(col);
+                        }
+                    }
+
+                    pointVisual.transform.localScale = Vector3.one * debugPointScale;
+                    pointVisual.name = "WalkableDebugPoint";
+
+                    if (debugContainer != null)
+                    {
+                        pointVisual.transform.SetParent(debugContainer);
+                    }
+
+                    spawnedDebugPoints.Add(pointVisual);
+                }
+            }
+        }
+
+        private void ClearRuntimeDebugPoints()
+        {
+            for (int i = 0; i < spawnedDebugPoints.Count; i++)
+            {
+                if (spawnedDebugPoints[i] != null)
+                {
+                    Destroy(spawnedDebugPoints[i]);
+                }
+            }
+
+            spawnedDebugPoints.Clear();
+        }
+
         public List<ARWalkablePlaneData> GetAllPlanes()
         {
             return planeDataList;
-        }
-
-        public Dictionary<int, List<ARWalkablePlaneData>> GetGroupedPlanes()
-        {
-            return groupedPlanes;
         }
 
         public ARWalkablePlaneData GetRandomPlane()
@@ -152,12 +252,6 @@ namespace ARNavigation
                 return Vector3.zero;
 
             return planeData.WalkablePoints[Random.Range(0, planeData.WalkablePoints.Count)];
-        }
-
-        public int GetPlaneGroupKey(ARWalkablePlaneData planeData)
-        {
-            if (planeData == null) return -1;
-            return planeData.GroupKey;
         }
 
         public List<Vector3> GetPointsFromSameGroup(int groupKey)
@@ -177,6 +271,7 @@ namespace ARNavigation
             return points;
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
@@ -194,5 +289,6 @@ namespace ARNavigation
                 }
             }
         }
+#endif
     }
 }
