@@ -16,6 +16,10 @@ namespace UnityEngine.XR.Templates.AR
     public class ARTemplateMenuManagerModified : MonoBehaviour
     {
         [SerializeField]
+        [Tooltip("Referencia al script que cambia los materiales.")]
+        ObjectMaterialChanger m_MaterialChanger;
+
+        [SerializeField]
         [Tooltip("Button that opens the create menu.")]
         Button m_CreateButton;
 
@@ -533,7 +537,26 @@ namespace UnityEngine.XR.Templates.AR
                 Destroy(currentFocusedObject.transform.gameObject);
             }
         }
+        public void OnFilterButtonClicked(int filterIndex)
+        {
+            
+            var currentFocusedInteractable = m_InteractionGroup?.focusInteractable;
 
+            if (currentFocusedInteractable != null && m_MaterialChanger != null)
+            {
+                
+                GameObject focusedGameObject = currentFocusedInteractable.transform.gameObject;
+
+                
+                m_MaterialChanger.ApplyMaterial(focusedGameObject, filterIndex);
+
+              
+                HideFilterMenu(); 
+            } else
+            {
+                HideFilterMenu();
+            }
+        }
         void ShowFilterButton()
         {
             var currentFocusedObject = m_InteractionGroup.focusInteractable;

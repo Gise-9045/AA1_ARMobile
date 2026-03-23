@@ -512,7 +512,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
@@ -932,7 +932,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
@@ -1171,7 +1171,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
@@ -1389,9 +1389,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1593,6 +1594,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2512387470890420967, guid: 48cb3fb68c91eb94999fd99957eb0cae, type: 3}
       insertIndex: 0
       addedObject: {fileID: 436358034}
+    - targetCorrespondingSourceObject: {fileID: 2512387470890420967, guid: 48cb3fb68c91eb94999fd99957eb0cae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1226519037}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2512387469002778309, guid: 48cb3fb68c91eb94999fd99957eb0cae, type: 3}
       insertIndex: -1
@@ -1768,9 +1772,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2440,10 +2445,14 @@ PrefabInstance:
     - target: {fileID: 5865099264268480235, guid: 063cc896506b947c7b2c2ae3beb5868f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2099970471}
+      objectReference: {fileID: 2099970470}
     - target: {fileID: 5865099264268480235, guid: 063cc896506b947c7b2c2ae3beb5868f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: StartCoaching
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865099264268480235, guid: 063cc896506b947c7b2c2ae3beb5868f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.XR.Templates.AR.CustomGoalManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6235513300977795393, guid: 063cc896506b947c7b2c2ae3beb5868f, type: 3}
       propertyPath: m_Pivot.x
@@ -3493,7 +3502,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
@@ -3787,9 +3796,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4006,7 +4016,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970471}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GoalManager, Assembly-CSharp
         m_MethodName: StartCoaching
         m_Mode: 1
@@ -4934,7 +4944,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
@@ -5353,9 +5363,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6116,7 +6127,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
@@ -6723,9 +6734,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7035,6 +7047,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1172842269}
   m_CullTransparentMesh: 1
+--- !u!1 &1226519036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1226519037}
+  - component: {fileID: 1226519038}
+  m_Layer: 0
+  m_Name: Material Changer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1226519037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226519036}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 237852452}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1226519038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226519036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03202e79ae889464384b301301e908b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaterialFilters:
+  - {fileID: 2100000, guid: 9f12d299d16099343a3c5c0d7285822a, type: 2}
+  - {fileID: 2100000, guid: 99685157b02e4d446bbecb015645e5e8, type: 2}
+  - {fileID: 2100000, guid: 91ff3830fc4055a4fb0d0d2be32101a7, type: 2}
+  - {fileID: 2100000, guid: f5ccd52dc494e054fbe7d7161dcabe25, type: 2}
+  - {fileID: 2100000, guid: 76618f7490c40334fa7b685859587d2e, type: 2}
+  - {fileID: 2100000, guid: be1e10ce8a6f8cc4fb08d11c7f722469, type: 2}
 --- !u!1 &1262986090
 GameObject:
   m_ObjectHideFlags: 0
@@ -8295,7 +8358,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
@@ -8812,7 +8875,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: ShowHideModal
         m_Mode: 1
@@ -9215,9 +9278,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9433,9 +9497,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10403,9 +10468,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
-        m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
-        m_MethodName: SetObjectToSpawn
+      - m_Target: {fileID: 2099970471}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Templates.AR.ARTemplateMenuManagerModified,
+          Assembly-CSharp
+        m_MethodName: OnFilterButtonClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10761,7 +10827,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: ShowHideDebugPlane
         m_Mode: 1
@@ -11323,7 +11389,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: ShowHideDebugMenu
         m_Mode: 1
@@ -11608,7 +11674,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: ClearAllObjects
         m_Mode: 1
@@ -11670,8 +11736,8 @@ GameObject:
   - component: {fileID: 2099970468}
   - component: {fileID: 2099970467}
   - component: {fileID: 2099970466}
-  - component: {fileID: 2099970472}
   - component: {fileID: 2099970471}
+  - component: {fileID: 2099970470}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -11770,7 +11836,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &2099970471
+--- !u!114 &2099970470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11779,7 +11845,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2099970465}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30f0e07d95a4d497bbc3dbd22d792191, type: 3}
+  m_Script: {fileID: 11500000, guid: 787befd6d29ce9e4b853934e9d3c79ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepList:
@@ -11802,8 +11868,8 @@ MonoBehaviour:
   m_GreetingPrompt: {fileID: 595971757}
   m_OptionsButton: {fileID: 1520419809}
   m_CreateButton: {fileID: 1059051467}
-  m_MenuManager: {fileID: 2099970472}
---- !u!114 &2099970472
+  m_MenuManager: {fileID: 2099970471}
+--- !u!114 &2099970471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11812,9 +11878,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2099970465}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f708c04c3dca17f4dbdc065df6a0c397, type: 3}
+  m_Script: {fileID: 11500000, guid: cc45305cb937ef04eb679a7782e0acea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MaterialChanger: {fileID: 1226519038}
   m_CreateButton: {fileID: 1059051469}
   m_DeleteButton: {fileID: 425410338}
   m_ObjectMenu: {fileID: 72989974}
@@ -11837,7 +11904,7 @@ MonoBehaviour:
       m_Name: Tap Start Position
       m_Type: 0
       m_ExpectedControlType: Vector2
-      m_Id: 96463c3e-8d89-48b7-920b-5dd7ce2bab4a
+      m_Id: c17edd5d-824f-4ee7-9f3b-49535483f656
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -11851,7 +11918,7 @@ MonoBehaviour:
       m_Name: Drag Current Position
       m_Type: 0
       m_ExpectedControlType: Vector2
-      m_Id: 8e9c9dc9-6275-4dda-a74f-7a43ab26f31b
+      m_Id: 93c1a551-9a3b-4ce4-9ee6-a2a69749e68e
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -11943,7 +12010,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2099970472}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ARTemplateMenuManager, Assembly-CSharp
         m_MethodName: SetObjectToSpawn
         m_Mode: 3
