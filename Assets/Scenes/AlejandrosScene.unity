@@ -1359,7 +1359,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a556d6285641614993b974b4daaab30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  languageCode: en-US
   uiText: {fileID: 371085596}
+  autoActivate: 1
+  autoRestartAfterPhrase: 1
+  restartDelay: 0.25
+  stopAfterEndOfSpeechDelay: 0.75
+  useSilenceWatchdog: 1
+  silenceWatchdogSeconds: 4
+  ttsRate: 1
+  ttsPitch: 1
+  keywordEvents:
+  - keyword: 
+    matchMode: 0
+    ignoreCase: 0
+    onDetected:
+      m_PersistentCalls:
+        m_Calls: []
+  onFinalResult:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &371085594
 GameObject:
   m_ObjectHideFlags: 0
