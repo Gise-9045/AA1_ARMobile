@@ -1701,7 +1701,7 @@ GameObject:
   - component: {fileID: 396601855}
   - component: {fileID: 396601854}
   m_Layer: 5
-  m_Name: Button (Pyramid)
+  m_Name: Thermic Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3060,7 +3060,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cc39c192440c8432582befdd623cb4db, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 55cb6ca3f02ecc94bbfc72dce928118a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3725,7 +3725,7 @@ GameObject:
   - component: {fileID: 826460899}
   - component: {fileID: 826460898}
   m_Layer: 5
-  m_Name: Button (Torus)
+  m_Name: VHS Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4427,7 +4427,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d80cabb7f46004842b09173491e74cc6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1bc3429b04b25cc419acfcd21af75007, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5292,7 +5292,7 @@ GameObject:
   - component: {fileID: 1001663613}
   - component: {fileID: 1001663612}
   m_Layer: 5
-  m_Name: Button (Arch)
+  m_Name: Night Vision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6454,7 +6454,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 930e939e9def94ef69711892eaa9af81, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e440c6b926854fe41a015dd3d5e3b3ee, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7092,11 +7092,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MaterialFilters:
-  - {fileID: 2100000, guid: 9f12d299d16099343a3c5c0d7285822a, type: 2}
-  - {fileID: 2100000, guid: 99685157b02e4d446bbecb015645e5e8, type: 2}
-  - {fileID: 2100000, guid: 91ff3830fc4055a4fb0d0d2be32101a7, type: 2}
-  - {fileID: 2100000, guid: f5ccd52dc494e054fbe7d7161dcabe25, type: 2}
-  - {fileID: 2100000, guid: 76618f7490c40334fa7b685859587d2e, type: 2}
+  - {fileID: -876546973899608171, guid: 0e6eeb5aa291b2547bf38201d1aab995, type: 3}
+  - {fileID: -876546973899608171, guid: 99ab24bb63d4994478ed7b6b0fd99667, type: 3}
+  - {fileID: -876546973899608171, guid: 040a8535eeb915c4581dde15eaf1f798, type: 3}
+  - {fileID: -876546973899608171, guid: 32da2062c29936345ab8e4248dd2ca97, type: 3}
+  - {fileID: -876546973899608171, guid: 39f76c468601b764bb7d575d548c1702, type: 3}
   - {fileID: 2100000, guid: be1e10ce8a6f8cc4fb08d11c7f722469, type: 2}
 --- !u!1 &1262986090
 GameObject:
@@ -7593,7 +7593,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: df7e78ca980944172aec00b77115a8c5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0052edad71858a645bed019f184d2929, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9207,7 +9207,7 @@ GameObject:
   - component: {fileID: 1684705157}
   - component: {fileID: 1684705156}
   m_Layer: 5
-  m_Name: Button (Cube)
+  m_Name: Noir Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10397,7 +10397,7 @@ GameObject:
   - component: {fileID: 1921647554}
   - component: {fileID: 1921647553}
   m_Layer: 5
-  m_Name: Button (Triangle)
+  m_Name: Crystal Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11191,7 +11191,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c5adfe294554543868fc7cf60dded650, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1633fe96c2ba1b947b570643da97e6b9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
