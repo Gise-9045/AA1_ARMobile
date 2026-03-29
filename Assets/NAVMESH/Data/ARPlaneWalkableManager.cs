@@ -271,6 +271,21 @@ namespace ARNavigation
             return points;
         }
 
+        public ARWalkablePlaneData GetPlaneDataFromCollider(Collider collider)
+        {
+            if (collider == null) return null;
+
+            for (int i = 0; i < planeDataList.Count; i++)
+            {
+                if (planeDataList[i] != null && planeDataList[i].MeshCollider == collider)
+                {
+                    return planeDataList[i];
+                }
+            }
+
+            return null;
+        }
+
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {

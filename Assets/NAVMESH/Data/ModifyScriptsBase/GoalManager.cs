@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
-namespace  UnityEngine.XR.Templates.AR
+namespace ARNavigation
 {
     /// <summary>
     /// Onboarding goal to be achieved as part of the <see cref="GoalManager"/>.
@@ -147,18 +147,7 @@ namespace  UnityEngine.XR.Templates.AR
             set => m_OptionsButton = value;
         }
 
-        [Tooltip("The Create Button to enable once the greeting prompt is dismissed.")]
-        [SerializeField]
-        GameObject m_CreateButton;
-
-        /// <summary>
-        /// The Create Button to enable once the greeting prompt is dismissed.
-        /// </summary>
-        public GameObject createButton
-        {
-            get => m_CreateButton;
-            set => m_CreateButton = value;
-        }
+       
 
         [Tooltip("The AR Template Menu Manager object to enable once the greeting prompt is dismissed.")]
         [SerializeField]
@@ -196,20 +185,44 @@ namespace  UnityEngine.XR.Templates.AR
 
         void CompleteGoal()
         {
-            if (m_CurrentGoal.CurrentGoal == OnboardingGoals.TapSurface)
+            if (m_CurrentGoal.CurrentGoal == OnboardingGoals.TapSurface && m_ObjectSpawner != null)
                 m_ObjectSpawner.objectSpawned -= OnObjectSpawned;
 
             m_CurrentGoal.Completed = true;
+
+            int previousStepIndex = m_CurrentGoalIndex;
             m_CurrentGoalIndex++;
-            if (m_OnboardingGoals.Count > 0)
+
+            // Apagar el step anterior si existe
+            if (previousStepIndex >= 0 && previousStepIndex < m_StepList.Count)
             {
-                m_CurrentGoal = m_OnboardingGoals.Dequeue();
-                m_StepList[m_CurrentGoalIndex - 1].stepObject.SetActive(false);
-                m_StepList[m_CurrentGoalIndex].stepObject.SetActive(true);
+                if (m_StepList[previousStepIndex] != null && m_StepList[previousStepIndex].stepObject != null)
+                {
+                    m_StepList[previousStepIndex].stepObject.SetActive(false);
+                }
+            }
+
+            // Si no quedan más goals, terminar
+            if (m_OnboardingGoals == null || m_OnboardingGoals.Count == 0)
+            {
+                m_AllGoalsFinished = true;
+                return;
+            }
+
+            // Sacar el siguiente goal
+            m_CurrentGoal = m_OnboardingGoals.Dequeue();
+
+            // Activar el siguiente step solo si existe en la lista
+            if (m_CurrentGoalIndex >= 0 && m_CurrentGoalIndex < m_StepList.Count)
+            {
+                if (m_StepList[m_CurrentGoalIndex] != null && m_StepList[m_CurrentGoalIndex].stepObject != null)
+                {
+                    m_StepList[m_CurrentGoalIndex].stepObject.SetActive(true);
+                }
             }
             else
             {
-                m_StepList[m_CurrentGoalIndex - 1].stepObject.SetActive(false);
+                Debug.LogWarning($"[GoalManager] No existe step visual para el índice {m_CurrentGoalIndex}. StepList.Count = {m_StepList.Count}");
                 m_AllGoalsFinished = true;
                 return;
             }
@@ -308,7 +321,6 @@ namespace  UnityEngine.XR.Templates.AR
 
             m_GreetingPrompt.SetActive(false);
             m_OptionsButton.SetActive(true);
-            m_CreateButton.SetActive(true);
             m_MenuManager.enabled = true;
 
             for (int i = startingStep; i < m_StepList.Count; i++)

@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ARNavigation
@@ -7,124 +7,118 @@ namespace ARNavigation
     {
         [SerializeField] private ARPlaneWalkableManager walkableManager;
         [SerializeField] private GameObject npcPrefab;
+        [SerializeField] private Camera arCamera;
 
-        [Header("Spawn")]
-        [SerializeField] private bool spawnAutomatically = true;
+        [Header("Spawn Settings")]
         [SerializeField] private float spawnHeightOffset = 0.05f;
-        [SerializeField] private float retryInterval = 1f;
-        [SerializeField] private int maxRetries = 20;
+        [SerializeField] private float npcScale = 0.2f;
+        [SerializeField] private float maxSpawnDistance = 5f;
 
-        private GameObject currentNpcInstance;
-        private ARWalkablePlaneData currentPlaneData;
-        private Coroutine spawnCoroutine;
+        private readonly List<GameObject> spawnedNpcs = new List<GameObject>();
 
-        private void Start()
-        {
-            if (spawnAutomatically)
-            {
-                spawnCoroutine = StartCoroutine(TrySpawnWhenReady());
-            }
-        }
-
-        public IEnumerator TrySpawnWhenReady()
-        {
-            int attempts = 0;
-
-            while (attempts < maxRetries)
-            {
-                attempts++;
-
-                if (walkableManager == null)
-                {
-                    Debug.LogWarning("[ARNPCSpawner] WalkableManager es null.");
-                    yield return new WaitForSeconds(retryInterval);
-                    continue;
-                }
-
-                ARWalkablePlaneData selectedPlane = walkableManager.GetRandomPlane();
-
-                if (selectedPlane == null)
-                {
-                    Debug.Log($"[ARNPCSpawner] Intento {attempts}: no hay planos válidos todavía.");
-                    yield return new WaitForSeconds(retryInterval);
-                    continue;
-                }
-
-                if (selectedPlane.WalkablePoints == null || selectedPlane.WalkablePoints.Count == 0)
-                {
-                    Debug.Log($"[ARNPCSpawner] Intento {attempts}: el plano no tiene puntos caminables.");
-                    yield return new WaitForSeconds(retryInterval);
-                    continue;
-                }
-
-                SpawnOnPlane(selectedPlane);
-                yield break;
-            }
-
-            Debug.LogWarning("[ARNPCSpawner] No se pudo instanciar el NPC tras varios intentos.");
-        }
-
-        public void SpawnNPC()
+        public void SpawnNPCInFrontOfCamera()
         {
             if (walkableManager == null)
             {
-                Debug.LogWarning("[ARNPCSpawner] WalkableManager no asignado.");
+                Debug.LogWarning("[ARNPCSpawner] No hay referencia a ARPlaneWalkableManager.");
                 return;
             }
 
-            ARWalkablePlaneData selectedPlane = walkableManager.GetRandomPlane();
+            if (npcPrefab == null)
+            {
+                Debug.LogWarning("[ARNPCSpawner] No hay prefab asignado.");
+                return;
+            }
+
+            if (arCamera == null)
+            {
+                arCamera = Camera.main;
+
+                if (arCamera == null)
+                {
+                    Debug.LogWarning("[ARNPCSpawner] No se encontró la cámara AR.");
+                    return;
+                }
+            }
+
+            Ray ray = new Ray(arCamera.transform.position, arCamera.transform.forward);
+
+            if (!Physics.Raycast(ray, out RaycastHit hit, maxSpawnDistance))
+            {
+                Debug.LogWarning("[ARNPCSpawner] No se detectó ningún plano delante de la cámara.");
+                return;
+            }
+
+            ARWalkablePlaneData selectedPlane = walkableManager.GetPlaneDataFromCollider(hit.collider);
 
             if (selectedPlane == null)
             {
-                Debug.LogWarning("[ARNPCSpawner] No hay planos válidos para spawnear.");
+                Debug.LogWarning("[ARNPCSpawner] El collider golpeado no pertenece a un plano navegable.");
                 return;
             }
 
-            if (selectedPlane.WalkablePoints == null || selectedPlane.WalkablePoints.Count == 0)
-            {
-                Debug.LogWarning("[ARNPCSpawner] El plano seleccionado no tiene puntos caminables.");
-                return;
-            }
+            Vector3 spawnPoint = GetClosestWalkablePoint(hit.point, selectedPlane);
+            spawnPoint += Vector3.up * spawnHeightOffset;
 
-            SpawnOnPlane(selectedPlane);
-        }
+            GameObject newNpc = Instantiate(npcPrefab, spawnPoint, Quaternion.identity);
+            newNpc.transform.localScale = Vector3.one * npcScale;
 
-        private void SpawnOnPlane(ARWalkablePlaneData selectedPlane)
-        {
-            if (npcPrefab == null)
-            {
-                Debug.LogWarning("[ARNPCSpawner] npcPrefab no asignado.");
-                return;
-            }
-
-            Vector3 spawnPoint = walkableManager.GetRandomPointFromPlane(selectedPlane);
-            spawnPoint.y += spawnHeightOffset;
-
-            if (currentNpcInstance != null)
-            {
-                Destroy(currentNpcInstance);
-            }
-
-            currentNpcInstance = Instantiate(npcPrefab, spawnPoint, Quaternion.identity);
-            currentPlaneData = selectedPlane;
-
-            Debug.Log($"[ARNPCSpawner] NPC instanciado en {spawnPoint}");
-
-            ARNPCSimpleMover mover = currentNpcInstance.GetComponent<ARNPCSimpleMover>();
-
+            ARNPCSimpleMover mover = newNpc.GetComponent<ARNPCSimpleMover>();
             if (mover != null)
             {
-                mover.Initialize(walkableManager, currentPlaneData);
+                mover.Initialize(walkableManager, selectedPlane);
             }
             else
             {
-                Debug.LogWarning("[ARNPCSpawner] El prefab no tiene ARNPCSimpleMover.");
+                Debug.LogWarning("[ARNPCSpawner] El prefab del NPC no tiene ARNPCSimpleMover.");
             }
+
+            spawnedNpcs.Add(newNpc);
+
+            Debug.Log($"[ARNPCSpawner] NPC instanciado delante de la cámara en {spawnPoint}. Total NPCs: {spawnedNpcs.Count}");
         }
 
-        public GameObject GetCurrentNpc()
+        private Vector3 GetClosestWalkablePoint(Vector3 targetPoint, ARWalkablePlaneData planeData)
         {
-            return currentNpcInstance;
+            if (planeData == null || planeData.WalkablePoints == null || planeData.WalkablePoints.Count == 0)
+            {
+                return targetPoint;
+            }
+
+            float closestDistance = float.MaxValue;
+            Vector3 closestPoint = planeData.WalkablePoints[0];
+
+            for (int i = 0; i < planeData.WalkablePoints.Count; i++)
+            {
+                float distance = Vector3.Distance(targetPoint, planeData.WalkablePoints[i]);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestPoint = planeData.WalkablePoints[i];
+                }
+            }
+
+            return closestPoint;
+        }
+
+        public void DestroyAllNPCs()
+        {
+            for (int i = 0; i < spawnedNpcs.Count; i++)
+            {
+                if (spawnedNpcs[i] != null)
+                {
+                    Destroy(spawnedNpcs[i]);
+                }
+            }
+
+            spawnedNpcs.Clear();
+            Debug.Log("[ARNPCSpawner] Todos los NPCs han sido eliminados.");
+        }
+
+        public int GetSpawnedNPCCount()
+        {
+            return spawnedNpcs.Count;
         }
     }
 }
